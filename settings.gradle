@@ -1,0 +1,8 @@
+rootProject.name = 'Spring-Social'
+include 'user-service'
+include 'post-service'
+include 'comment-service'
+include 'discovery-service'
+include 'api-gateway'
+include 'friendship-service'
+
