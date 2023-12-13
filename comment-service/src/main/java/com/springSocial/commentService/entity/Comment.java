@@ -19,4 +19,5 @@ public class Comment {
     private Date createdDate;
     private Date modifiedDate;
     private long postId;
+    private long userId;
 }

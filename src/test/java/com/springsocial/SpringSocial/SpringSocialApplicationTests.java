@@ -1,12 +1,12 @@
-package com.springSocial.userService;
+package com.springsocial.SpringSocial;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class UserServiceApplicationTests {
+class SpringSocialApplicationTests {
 
-//	@Test
+	@Test
 	void contextLoads() {
 	}
 

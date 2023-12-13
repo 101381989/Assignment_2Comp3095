@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,12 +37,12 @@ public class UserService {
         return userList;
     }
 
-    public List<User> getAllAvailablePosts(){
-        return null;
-    }
-
     public void deleteUser(Long id) {
        userRepository.deleteById(id);
     }
 
+    public User getUserByUserId(long id){
+        Optional<User> optionalUser = userRepository.findById(id);
+        return optionalUser.orElse(null);
+    }
 }

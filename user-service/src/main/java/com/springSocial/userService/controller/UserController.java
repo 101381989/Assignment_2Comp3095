@@ -63,4 +63,15 @@ public class UserController {
         }
         return responseEntity;
     }
+
+    @GetMapping("/id")
+    public ResponseEntity<User> getUserById(@RequestParam Long userId) {
+        ResponseEntity<User> responseEntity;
+        try {
+            responseEntity = new ResponseEntity<>(userService.getUserByUserId(userId), HttpStatus.OK);
+        } catch (Exception e) {
+            throw new UserException("Error in fetching user");
+        }
+        return responseEntity;
+    }
 }

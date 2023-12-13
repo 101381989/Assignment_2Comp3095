@@ -33,8 +33,12 @@ services:
   ## Mongo Docker Compose Config
   mongo:
     container_name: mongo
-    image: mongo:4.4.14-rc0-focal
+    image: mongo:latest
     restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root_user
+      MONGO_INITDB_ROOT_PASSWORD: root_password
+      MONGO_INITDB_DATABASE: postDb
     ports:
       - "27017:27017"
     expose:
@@ -87,8 +91,6 @@ services:
     container_name: discovery-server
     ports:
       - "8761:8761"
-#    environment:
-#      - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       - zipkin
 
@@ -101,7 +103,7 @@ services:
     expose:
       - "9000"
     environment:
-#      - SPRING_PROFILES_ACTIVE=docker
+
 #      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY= TRACE
       - EUREKA_SERVER=http://discovery-server:8761/eureka/
     depends_on:
@@ -114,8 +116,8 @@ services:
     container_name: post-service
     build: ./post-service
     image: post-service-img
-#    environment:
-#      - SPRING_PROFILES_ACTIVE=docker
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://root_user:root_password@mongo:27017/postDb
     depends_on:
       - mongo
       - discovery-server
@@ -127,7 +129,6 @@ services:
     build: ./user-service
     image: user-service-img
     environment:
-#      - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-user:3306/userDb
       - EUREKA_SERVER=http://discovery-server:8761/eureka/
     depends_on:
@@ -142,11 +143,23 @@ services:
     build: ./comment-service
     image: comment-service-img
     environment:
-#      - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-comment:3307/commentDb
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-comment:3306/commentDb
       - EUREKA_SERVER=http://discovery-server:8761/eureka/
     depends_on:
       - mysql-comment
+      - discovery-server
+      - api-gateway
+      - zipkin
+
+    ## Friendship-Service Docker Compose Config
+  friendship-service:
+    container_name: friendship-service
+    build: ./friendship-service
+    image: friendship-service-img
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-comment:3306/commentDb
+      - EUREKA_SERVER=http://discovery-server:8761/eureka/
+    depends_on:
       - discovery-server
       - api-gateway
       - zipkin

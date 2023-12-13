@@ -1,6 +1,7 @@
 package com.springSocial.commentService.controller;
 
 import com.springSocial.commentService.dto.CommentList;
+import com.springSocial.commentService.dto.ResponseDTO;
 import com.springSocial.commentService.entity.Comment;
 import com.springSocial.commentService.exception.CommentException;
 import com.springSocial.commentService.service.CommentService;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/comment")
+@RequestMapping("/api/comment")
 public class CommentController {
 
     @Autowired
@@ -41,8 +42,8 @@ public class CommentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Comment>> getComments() {
-        ResponseEntity<List<Comment>> responseEntity;
+    public ResponseEntity<List<ResponseDTO>> getComments() {
+        ResponseEntity<List<ResponseDTO>> responseEntity;
         try {
             responseEntity = new ResponseEntity<>(commentService.getComments(), HttpStatus.OK);
         } catch (Exception e) {
@@ -50,7 +51,6 @@ public class CommentController {
         }
         return responseEntity;
     }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteComment(@PathVariable long id) {
